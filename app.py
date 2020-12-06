@@ -1,16 +1,12 @@
-#!/usr/bin/env python
-# from pprint import pprint as ppfrom flask
-# import Flask, flash, redirect, render_template, request, url_for
-# from weather import query_api
-
-import os
-import sys
+from decouple import config
 import requests
 from helper import kelvin_to_celsius
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
-API_KEY = os.environ.get('API_KEY')
+API_KEY = config('API_KEY')
+print('load and this --- ', config('FLASK_DEBUG'))
+app.config['FLASK_DEBUG'] = config('FLASK_DEBUG')
 
 @app.route('/')
 def index():
@@ -44,4 +40,4 @@ def check_weather():
 if __name__ == '__main__':
     # debug=True gives us error messages in the browser and also "reloads" our
     # web app if we change the code.
-    app.run(debug=True)
+    app.run()
