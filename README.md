@@ -1,4 +1,4 @@
-# Weather Flass Application
+# Weather Flask Application
 A simple flask application that retrieves the weather of a given city by making API requests to a third party website, [OpenWeatherMap](https://openweathermap.org/).
 
 The application was deployed with Heroku and hosted here:
