@@ -1,6 +1,36 @@
-.center {
+html {
+    height:100%;
+    width:100%;
+    background: url(https://i.postimg.cc/kXq9Qmnj/bgd1.jpg) no-repeat;
+    background-size: cover;
+    }
+
+body {
+    background-color: transparent
+}
+.inputform{
+    text-align: left;
+}
+
+.outer {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
   margin: auto;
-  width: 50%;
+  width: 35%;
   border: 3px solid lightskyblue;
   padding: 25px;
+  background: #e9eaef94;
+  text-align: center;
 }
