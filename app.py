@@ -1,11 +1,10 @@
 from decouple import config
 import requests
-from helper import kelvin_to_celsius
+from helper import kelvin_to_celsius, kelvin_to_fahrenheit
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 API_KEY = config('API_KEY')
-print('load and this --- ', config('FLASK_DEBUG'))
 app.config['FLASK_DEBUG'] = config('FLASK_DEBUG')
 
 @app.route('/')
@@ -14,30 +13,34 @@ def index():
 
 @app.route('/check_weather', methods=['GET'])
 def check_weather():
+	default_state = 'CA'
+	default_country = 'US'
 	city = request.args.get('cityname')
-	url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid={}'.format(city, API_KEY)
+	state= request.args.get('statename')
+	country = request.args.get('countryname')
+	#print('print this', type(state), type(country))
+	if state == '' and country.lower()=='us':
+		state = default_state
+	if country == '':
+		country = default_country
+	url = 'http://api.openweathermap.org/data/2.5/weather?q={},{},{}&appid={}'.format(city, state, country, API_KEY)
 	response = requests.get(url).json()
-	#print(url)
-	# response = {"base": "stations", "clouds": {"all": 75}, "cod": 200, "coord": {"lat": 40.71, "lon": -74.01}, "dt": 1607137692,
-	# 	 "id": 5128581, "main": {"feels_like": 276, "humidity": 93, "pressure": 1016, "temp": 280.15, "temp_max": 280.93,
-	# 							 "temp_min": 279.26}, "name": "New York",
-	# 	 "sys": {"country": "US", "id": 4610, "sunrise": 1607083462, "sunset": 1607117337, "type": 1}, "timezone": -18000,
-	# 	 "visibility": 10000, "weather": [{"description": "broken clouds", "icon": "04n", "id": 803, "main": "Clouds"}],
-	# 	 "wind": {"deg": 220, "speed": 4.6}}
-	#city = 'New York'
 	if response.get('cod') != 200:
 		message = response.get('message', '')
-		return f'Error getting temperature for {city.title()}. Error message = {message}'
+		error_message = {'city': city.title(),
+						 'message': message}
+		return render_template('error.html', error_message=error_message)
 	else:
 		weather = {
-		'city' : city.title(),
-		'temperature': kelvin_to_celsius(response['main']['feels_like']),
+		'city' : response['name'].title(),
+		'state': state.upper(),
+		'country': response['sys']['country'].upper(),
+		'celsius': kelvin_to_celsius(response['main']['feels_like']),
+		'fahrenheit': kelvin_to_fahrenheit(response['main']['feels_like']),
 		'description': response['weather'][0]['description']
 		}
 
 	return render_template('weather.html', weather=weather)
 
 if __name__ == '__main__':
-    # debug=True gives us error messages in the browser and also "reloads" our
-    # web app if we change the code.
     app.run()
