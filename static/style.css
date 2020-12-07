@@ -27,10 +27,30 @@ body {
 }
 
 .inner {
-  margin: auto;
+  margin: 50px auto;
   width: 35%;
-  border: 3px solid lightskyblue;
+  border: 3px solid ;
   padding: 25px;
   background: #e9eaef94;
   text-align: center;
+  min-width: 350px;
+}
+
+.row {
+    display: flex;
+    }
+    
+.col-sm {
+    border: 1px solid;
+    padding:10px;}
+
+.forecast-container {
+  margin: auto;
+  width: 80%;
+  border: 3px solid ;
+  padding: 25px;
+  background: #e9eaef94;
+  text-align: center;
+  min-width: 350px;
+
 }
