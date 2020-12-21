@@ -17,3 +17,6 @@ reached the limitation of API calls.
 Heroku's free tier hosting server will sleep the server after 30 minutes of
 inactivity. If it's your first time accessing the website please wait a 
 couple minute for the server to load up.
+
+## Credit
+Weather icon: https://github.com/erikflowers/weather-icons
