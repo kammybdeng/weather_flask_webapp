@@ -2,10 +2,13 @@ from decouple import config
 import requests
 from helper import kelvin_to_celsius, kelvin_to_fahrenheit, forecast_api_request
 from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 API_KEY = config('API_KEY')
 app.config['FLASK_DEBUG'] = config('FLASK_DEBUG')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
 
 
 @app.route('/')
