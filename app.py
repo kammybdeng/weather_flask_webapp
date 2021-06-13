@@ -1,19 +1,40 @@
 from decouple import config
 import requests
-from helper import kelvin_to_celsius, kelvin_to_fahrenheit, forecast_api_request
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, flash, redirect, url_for
+
+from helper import forecast_api_request
+from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 API_KEY = config('API_KEY')
 app.config['FLASK_DEBUG'] = config('FLASK_DEBUG')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
+app.config['SECRET_KEY'] = config('SECRET_KEY')
 
 
 @app.route('/')
 def index():
 	return render_template('index.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	form = RegistrationForm()
+	if form.validate_on_submit():
+		flash(f'Account created for {form.username.data}!', 'success')
+		return redirect(url_for('index'))
+	return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	form = LoginForm()
+	if form.validate_on_submit():
+		if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+			flash('You have been logged in!', 'success')
+			return redirect(url_for('index'))
+		else:
+			flash('Login Unsuccessful.', 'danger')
+	return render_template('login.html', title='Login', form=form)
 
 
 @app.route('/check_weather', methods=['GET'])
