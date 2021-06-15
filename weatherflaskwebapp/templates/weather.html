@@ -1,10 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
       <div class="inner">
         <h1>{{ weather.current[0].city }}</h1>
-        <p class="h6">{{ weather.current[0].country }}</p>
+<!--        <p class="h6">{{ weather.current[0].country }}</p>-->
         <p class="h5">Current Time:  {{ weather.current[0].datetime }}</p>
         <i class= "icon wi wi-owm-{{ weather.current[0].iconcode }}"></i>
         <p>{{ weather.current[0].description }}</p>
