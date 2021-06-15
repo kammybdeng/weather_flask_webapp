@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Optional
 from weatherflaskwebapp.models import User
 
 
@@ -33,3 +33,9 @@ class LoginForm(FlaskForm):
                              validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
+class WeatherForm(FlaskForm):
+    city = StringField('City', validators=[Optional()])
+    zipcode = StringField('Zipcode', validators=[Optional(), Length(min=5, max=5)])
+    submit = SubmitField('Submit')
