@@ -4,8 +4,10 @@ from flask import render_template, request, flash, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from weatherflaskwebapp import app, db, bcrypt
 from weatherflaskwebapp.helper import forecast_api_request
-from weatherflaskwebapp.forms import RegistrationForm, LoginForm, WeatherForm
+from weatherflaskwebapp.forms import RegistrationForm, LoginForm, WeatherForm, SaveForm
 from weatherflaskwebapp.models import User
+import ast
+
 
 API_KEY = config('API_KEY')
 
@@ -35,7 +37,13 @@ def index():
 			return render_template('error.html', title='Error', error_message=error_message)
 		else:
 			weather_dict = forecast_api_request(response, API_KEY)
-		return render_template('weather.html', weather=weather_dict)
+
+		# if save_form.validate_on_submit():
+		# 	return redirect(url_for('new_city', city=city))
+		# return render_template('weather.html', weather=weather_dict, form=save_form)
+	# elif save_form.validate_on_submit():
+	# 	print('----here---')
+		return redirect(url_for('new_city', weather=weather_dict))
 	return render_template('index.html', title='Index', form=form)
 
 
@@ -79,7 +87,21 @@ def logout():
 	logout_user()
 	return redirect(url_for('login'))
 
+
 @app.route('/account')
 @login_required
 def account():
 	return render_template('account.html', title='Account')
+
+
+@app.route('/new_city', methods=['GET', 'POST'])
+@login_required
+def new_city():
+	form = SaveForm()
+	weather = request.args.get('weather')
+	weather = ast.literal_eval(weather)
+	if form.validate_on_submit():
+		# check if city is saved
+		flash('City Saved!', 'success')
+		return redirect(url_for('index'))
+	return render_template('weather.html', weather=weather, form=form)

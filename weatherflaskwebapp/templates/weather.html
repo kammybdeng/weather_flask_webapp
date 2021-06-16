@@ -9,6 +9,12 @@
         <p>{{ weather.current[0].description }}</p>
         <p class="h4"> {{ weather.current[0].celsius }} Celsius | {{ weather.current[0].fahrenheit }} Fahrenheit</p>
         <p> UV index: {{ weather.current[0].uvi }}</p>
+          <form method="POST" action="">
+                {{ form.hidden_tag() }}
+              <div class="form-group">
+                  {{ form.submit(class="btn btn-outline-info") }}
+              </div>
+            </form>
       </div>
         <div class="forecast-container">
           <div class="row">
