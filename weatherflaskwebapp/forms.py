@@ -42,3 +42,6 @@ class WeatherForm(FlaskForm):
 
 class SaveForm(FlaskForm):
     submit = SubmitField('Save')
+
+class UnSaveForm(FlaskForm):
+    submit = SubmitField('Unsave')
