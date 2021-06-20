@@ -1,6 +1,6 @@
 from decouple import config
 import requests
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from weatherflaskwebapp import app, db, bcrypt
 from weatherflaskwebapp.helper import forecast_api_request
@@ -92,16 +92,17 @@ def logout():
 @app.route('/account')
 @login_required
 def account():
-	cities = User.query.filter_by(id=current_user.id).first().cities
+	# cities = User.query.filter_by(id=current_user.id).first().cities
+	cities = City.query.filter_by(user_id=current_user.id).all()
 	return render_template('account.html', title='Account', cities=cities)
 
 
 @app.route('/new_city', methods=['GET', 'POST'])
-@login_required
 def add_city():
 	form = SaveForm()
 	weather = request.args.get('weather')
 	weather = ast.literal_eval(weather)
+
 	if form.validate_on_submit():
 		# check if city is saved
 		city = weather.get('current')[0].get('city')
@@ -112,12 +113,11 @@ def add_city():
 		db.session.add(saved_city)
 		db.session.commit()
 		flash('City Saved!', 'success')
-		return redirect(url_for('index'))
+		return redirect(url_for('account'))
 	return render_template('weather.html', weather=weather, form=form)
 
 
 @app.route('/remove_city', methods=['GET', 'POST'])
-@login_required
 def remove_city():
 	form = UnSaveForm()
 	weather = request.args.get('weather')
@@ -127,5 +127,22 @@ def remove_city():
 		City.query.filter_by(name=city, user_id=current_user.id).delete()
 		db.session.commit()
 		flash('City Unsaved!', 'danger')
-		return redirect(url_for('index'))
+		return redirect(url_for('account'))
 	return render_template('weather.html', weather=weather, form=form)
+
+
+@app.route('/testing', methods=['GET', 'POST'])
+def testing():
+	return render_template('form.html')
+
+
+@app.route('/process', methods=['POST'])
+def process():
+	email = request.form['email']
+	name = request.form['name']
+	if name and email:
+		newName = name[::-1]
+		return jsonify({'name': newName})
+
+	return jsonify({'error': 'MISSING data!'})
+	

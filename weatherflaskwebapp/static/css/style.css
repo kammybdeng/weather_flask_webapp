@@ -22,7 +22,7 @@ body {
 }
 
 .outer:before {
-  background: url(https://worldoftravel.co/wp-content/uploads/1-1.jpeg) no-repeat;
+  background: url('../jpg/image.jpeg') no-repeat;
   background-size: cover;
   position: absolute;
   content: "";
