@@ -9,7 +9,7 @@ Features in development:
 - Allow users to create, update, delete saved cities (feature-city-list branch)
 
 ### Technologies Used
-Flask, Bootstrap, HTML, CSS
+Flask, JavaScript, AJAX, jQuery, HTML/CSS, Bootstrap
 
 ### API limitation
 OpenWeatherMap API supports 60 calls within an hour.
