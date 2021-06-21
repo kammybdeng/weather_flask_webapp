@@ -8,10 +8,8 @@ env
 # DB
 site.db
 
-## AJAX testing
+## Background Image
 weatherflaskwebapp/static/jpg/
-weatherflaskwebapp/templates/form.html
-weatherflaskwebapp/static/js/
 
 # Dependency directories
 node_modules/
