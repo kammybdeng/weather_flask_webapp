@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="inner">
+    <div class="inner" id="inputForm" >
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
@@ -37,9 +37,42 @@
                     </div>
 
                 </fieldset>
-                <div class="form-group">
-                        {{ form.submit(class="btn btn-outline-info") }}
+                <div class="form-group" >
+                        {{ form.submit(class="btn btn-outline-info" ) }}
                 </div>
             </form>
        </div>
+
+{% raw %}
+            <script id="result_template" type="text/html">
+          <div class="inner">
+              {{ #current }}
+                <h1>{{ city }}</h1>
+
+    <!--        <p class="h6">{{ weather.current[0].country }}</p>-->
+            <p class="h5">Current Time:  {{ datetime }}</p>
+            <i class= "icon wi wi-owm-{{ current.iconcode }}"></i>
+            <p>{{ description }}</p>
+            <p class="h4"> {{ celsius }} Celsius | {{ fahrenheit }} Fahrenheit</p>
+            <p> UV index: {{ uvi }}</p>
+{{ /current }}
+          </div>
+            <div class="forecast-container">
+              <div class="row">
+                  {{ #forecast }}
+                <div class="col-sm">
+                  <p class="h5">{{ datetime }}</p><br/>
+                  <p class="h7">{{ celsius }} Celsius | {{ fahrenheit }} Fahrenheit</p>
+                  <p > UV index: {{ uvi }} </p>
+                </div>
+                  {{ /forecast }}
+              </div>
+            </div>
+        </div>
+    </script>
+
+{% endraw %}
+
+    <div id="result"></div>
+
 {% endblock content %}

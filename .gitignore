@@ -1,10 +1,22 @@
+# Config File
 .env
-.DS_Store
-.idea
-__pycache__
+
+# Virtual Env
 venv
 env
+
+# DB
 site.db
+
+## AJAX testing
 weatherflaskwebapp/static/jpg/
 weatherflaskwebapp/templates/form.html
 weatherflaskwebapp/static/js/
+
+# Dependency directories
+node_modules/
+
+# Misc
+.DS_Store
+.idea
+__pycache__

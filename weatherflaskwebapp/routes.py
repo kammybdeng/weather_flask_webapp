@@ -1,6 +1,6 @@
 from decouple import config
 import requests
-from flask import render_template, request, flash, redirect, url_for, jsonify
+from flask import render_template, request, flash, redirect, url_for, jsonify, session
 from flask_login import login_user, logout_user, current_user, login_required
 from weatherflaskwebapp import app, db, bcrypt
 from weatherflaskwebapp.helper import forecast_api_request
@@ -11,6 +11,41 @@ import ast
 
 API_KEY = config('API_KEY')
 
+
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+# 	form = WeatherForm()
+# 	if form.validate_on_submit():
+# 		countrycode = 'us'
+# 		if not form.city.data and not form.zipcode.data:
+# 			error_message = {
+# 				'message': 'Please Fill In At Least One Field'
+# 			}
+# 			return render_template('error.html', title='Error', error_message=error_message)
+# 		elif form.city.data:
+# 			city = form.city.data.strip()
+# 			url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}'
+# 		elif form.zipcode.data:
+# 			zipcode = form.zipcode.data.strip()
+# 			url = f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},{countrycode}&appid={API_KEY}"
+# 		response = requests.get(url).json()
+# 		if response.get('cod') != 200:
+# 			message = response.get('message', '')
+# 			error_message = {
+# 				'message': message
+# 			}
+# 			return render_template('error.html', title='Error', error_message=error_message)
+# 		else:
+# 			weather_dict = forecast_api_request(response, API_KEY)
+# 			city = weather_dict.get('current')[0].get('city')
+# 			user = User.query.filter_by(id=current_user.id).first()
+# 			user_cities = user.cities
+# 			# check if city is saved
+# 			if city not in [c.name for c in user_cities]:
+# 				return redirect(url_for('add_city', weather=weather_dict))
+# 			else:
+# 				return redirect(url_for('remove_city', weather=weather_dict))
+# 	return render_template('index.html', title='Index', form=form)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -41,17 +76,18 @@ def index():
 			user = User.query.filter_by(id=current_user.id).first()
 			user_cities = user.cities
 			# check if city is saved
+			print('weather_dict------', weather_dict)
 			if city not in [c.name for c in user_cities]:
 				return redirect(url_for('add_city', weather=weather_dict))
 			else:
 				return redirect(url_for('remove_city', weather=weather_dict))
-	return render_template('index.html', title='Index', form=form)
+	return render_template('home.html', title='Home', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
-		return redirect(url_for('index'))
+		return redirect(url_for('home'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -62,14 +98,14 @@ def register():
 		db.session.commit()
 		flash(f'Account created for {form.username.data}! '
 			  f'You are now able to login', 'success')
-		return redirect(url_for('index'))
+		return redirect(url_for('login'))
 	return render_template('register.html', title='Register', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
-		return redirect(url_for('index'))
+		return redirect(url_for('home'))
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
@@ -77,7 +113,7 @@ def login():
 			login_user(user, remember=form.remember.data)
 			next_page = request.args.get('next')
 			flash('You have been logged in!', 'success')
-			return redirect(next_page) if next_page else redirect(url_for('index'))
+			return redirect(next_page) if next_page else redirect(url_for('home'))
 		else:
 			flash('Login Unsuccessful.', 'danger')
 	return render_template('login.html', title='Login', form=form)
@@ -131,18 +167,56 @@ def remove_city():
 	return render_template('weather.html', weather=weather, form=form)
 
 
-@app.route('/testing', methods=['GET', 'POST'])
-def testing():
-	return render_template('form.html')
+# @app.route('/testing', methods=['GET', 'POST'])
+# def testing():
+# 	return render_template('form.html')
+#
+#
+# @app.route('/process', methods=['POST'])
+# def process():
+# 	email = request.form['email']
+# 	name = request.form['name']
+# 	if name and email:
+# 		newName = name[::-1]
+# 		return jsonify({'name': newName})
+#
+# 	return jsonify({'error': 'MISSING data!'})
 
 
-@app.route('/process', methods=['POST'])
-def process():
-	email = request.form['email']
-	name = request.form['name']
-	if name and email:
-		newName = name[::-1]
-		return jsonify({'name': newName})
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+	form = WeatherForm()
+	return render_template('home.html', form=form)
 
-	return jsonify({'error': 'MISSING data!'})
-	
+
+@app.route('/fetch', methods=['POST', 'GET'])
+def fetch():
+	city = request.form['city']
+	#zipcode = request.form['zipcode']
+	countrycode = 'us'
+	zipcode = ''
+
+	if not city and not zipcode:
+		return jsonify({'error': 'Please Fill In At Least One Field'})
+
+	elif city:
+		city = city.strip()
+		url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}'
+	# elif zipcode:
+	# 	zipcode = zipcode.strip()
+	# 	url = f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},{countrycode}&appid={API_KEY}"
+
+	# OpenWeather response
+	response = requests.get(url).json()
+	if response.get('cod') != 200:
+		message = response.get('message', '')
+		return jsonify({'error': message})
+	else:
+		weather_dict = forecast_api_request(response, API_KEY)
+		print('weather_dict', weather_dict)
+		# city = weather_dict.get('current').get('city')
+		# user = User.query.filter_by(id=current_user.id).first()
+		# user_cities = user.cities
+	return jsonify(weather_dict)
+
+
