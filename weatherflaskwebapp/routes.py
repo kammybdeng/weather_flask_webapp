@@ -133,38 +133,39 @@ def account():
 	return render_template('account.html', title='Account', cities=cities)
 
 
-@app.route('/new_city', methods=['GET', 'POST'])
-def add_city():
-	form = SaveForm()
-	weather = request.args.get('weather')
-	weather = ast.literal_eval(weather)
-
-	if form.validate_on_submit():
+@app.route('/save_city', methods=['GET', 'POST'])
+def save_city():
+	if current_user.is_authenticated:
 		# check if city is saved
-		city = weather.get('current')[0].get('city')
+		city = request.form.get('city')
 		user = User.query.filter_by(id=current_user.id).first()
-		# user_cities = user.cities
-		# if city not in [c.name for c in user_cities]:
-		saved_city = City(name=city, user_id=user.id)
-		db.session.add(saved_city)
-		db.session.commit()
+		user_cities = user.cities
+		if city not in [c.name for c in user_cities]:
+			saved_city = City(name=city, user_id=user.id)
+			db.session.add(saved_city)
+			db.session.commit()
 		flash('City Saved!', 'success')
-		return redirect(url_for('account'))
-	return render_template('weather.html', weather=weather, form=form)
+	else:
+		flash('Please Login First!', 'danger')
+	return redirect(url_for('home'))
+	# return render_template('weather.html', weather=weather, form=form)
 
 
-@app.route('/remove_city', methods=['GET', 'POST'])
-def remove_city():
-	form = UnSaveForm()
-	weather = request.args.get('weather')
-	weather = ast.literal_eval(weather)
-	if form.validate_on_submit():
-		city = weather.get('current')[0].get('city')
-		City.query.filter_by(name=city, user_id=current_user.id).delete()
-		db.session.commit()
-		flash('City Unsaved!', 'danger')
-		return redirect(url_for('account'))
-	return render_template('weather.html', weather=weather, form=form)
+@app.route('/unsave_city', methods=['GET', 'POST'])
+def unsave_city():
+	if current_user.is_authenticated:
+		# check if city is saved
+		city = request.form.get('city')
+		user = User.query.filter_by(id=current_user.id).first()
+		user_cities = user.cities
+		if city in [c.name for c in user_cities]:
+			City.query.filter_by(name=city, user_id=current_user.id).delete()
+			db.session.commit()
+			flash('City Unsaved!', 'danger')
+	else:
+		flash('Please Login First!', 'danger')
+	return redirect(url_for('home'))
+	#return render_template('weather.html', weather=weather, form=form)
 
 
 # @app.route('/testing', methods=['GET', 'POST'])
@@ -213,10 +214,20 @@ def fetch():
 		return jsonify({'error': message})
 	else:
 		weather_dict = forecast_api_request(response, API_KEY)
-		print('weather_dict', weather_dict)
 		# city = weather_dict.get('current').get('city')
-		# user = User.query.filter_by(id=current_user.id).first()
-		# user_cities = user.cities
+
+
+	# weather_dict = {'current': {'city': 'Boston', 'country': 'US', 'celsius': 31, 'fahrenheit': 89, 'uvi': 4.09, 'description': 'broken clouds', 'iconcode': 803, 'datetime': '06/21 09:10'}, 
+	# 'forecast': [{'datetime': '06/21', 'celsius': 31, 'fahrenheit': 89, 'uvi': 8.45}, {'datetime': '06/22', 'celsius': 26, 'fahrenheit': 78, 'uvi': 6.55}, {'datetime': '06/23', 'celsius': 21, 'fahrenheit': 70, 'uvi': 8.14}, {'datetime': '06/24', 'celsius': 24, 'fahrenheit': 76, 'uvi': 8.13}, {'datetime': '06/25', 'celsius': 22, 'fahrenheit': 73, 'uvi': 8.99}]}
+	
+	if current_user:
+		user = User.query.filter_by(id=current_user.id).first()
+		user_cities = user.cities
+		if city.lower() in [c.name.lower() for c in user_cities]:
+			weather_dict['saved'] = True
+
+	
+	#print('weather_dict', weather_dict)
 	return jsonify(weather_dict)
 
 
