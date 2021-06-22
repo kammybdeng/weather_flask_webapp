@@ -1,5 +1,4 @@
-#web: gunicorn app:app
-web: gunicorn --host 0.0.0.0 --port ${PORT}
+web: gunicorn
 app:app
 init: flask db init
 migrate: flask db migrate
