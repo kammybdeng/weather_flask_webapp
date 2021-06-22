@@ -1,8 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
-        <div class="inner content-section">
-            <h1>{{ current_user.username }}</h1>
-            <p class="text-secondary">{{ current_user.email }}</p>
-        <div/>
+    <div class="inner">
+        <p>{{ current_user.username }}</p>
+        <p>{{ current_user.email }}</p>
+    </div>
+
+    <div class="forecast-container">
+        {% if cities %}
+            <div class="row">
+                {% for city in cities %}
+                <div class="col-sm">
+                    <p>{{ city.name }}</p>
+                </div>
+                {% endfor %}
+            </div>
+                        </div>
+        {% else %}
+            <p>No Cities Saved</p>
+        {% endif %}
+    </div>
+
 {% endblock content %}

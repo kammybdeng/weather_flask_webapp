@@ -1,7 +1,20 @@
+# Config File
 .env
+
+# Virtual Env
+venv
+env
+
+# DB
+site.db
+
+## Background Image
+weatherflaskwebapp/static/jpg/
+
+# Dependency directories
+node_modules/
+
+# Misc
 .DS_Store
 .idea
 __pycache__
-venv
-env
-site.db

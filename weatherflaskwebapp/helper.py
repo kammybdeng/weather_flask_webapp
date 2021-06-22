@@ -16,9 +16,14 @@ def timestamp_to_datetime(ts, timezone_offset=0):
 
 
 def get_daily_forecast(daily_list):
+    """
+    Create daily forecast dictionary from a list
+    :param daily_list:
+    :return: list of dictionaries
+    """
     forecast_list = []
     for item in daily_list[:-3]:
-        D = dict()
+        D = {}
         D['datetime'] = timestamp_to_datetime(item['dt'])[:5]
         D['celsius'] = kelvin_to_celsius(item['feels_like']['day'])
         D['fahrenheit'] = kelvin_to_fahrenheit(item['feels_like']['day'])
@@ -28,14 +33,19 @@ def get_daily_forecast(daily_list):
 
 
 def forecast_api_request(response, API_KEY):
-    # weather_dict = dict()
+    """
+    Query again to get next five days forecasting
+    :param response:
+    :param API_KEY:
+    :return:
+    """
     lon = response['coord']['lon']
     lat = response['coord']['lat']
     url = 'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exclude=minutely,hourly&appid={}' \
         .format(lat, lon, API_KEY)
     forecast_response = requests.get(url).json()
     weather_dict = {
-        'current': [{
+        'current': {
             'city': response['name'].title(),
             'country': response['sys']['country'].upper(),
             'celsius': kelvin_to_celsius(response['main']['feels_like']),
@@ -46,7 +56,7 @@ def forecast_api_request(response, API_KEY):
             'datetime': timestamp_to_datetime(forecast_response['current']['dt'],
                                               forecast_response['timezone_offset']
                                               )
-        }],
+        },
         'forecast': get_daily_forecast(forecast_response['daily'])
     }
     return weather_dict

@@ -39,3 +39,9 @@ class WeatherForm(FlaskForm):
     city = StringField('City', validators=[Optional()])
     zipcode = StringField('Zipcode', validators=[Optional(), Length(min=5, max=5)])
     submit = SubmitField('Submit')
+
+class SaveForm(FlaskForm):
+    submit = SubmitField('Save')
+
+class UnSaveForm(FlaskForm):
+    submit = SubmitField('Unsave')
