@@ -1,12 +1,11 @@
 from decouple import config
 import requests
-from flask import render_template, request, flash, redirect, url_for, jsonify, session
+from flask import render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from weatherflaskwebapp import app, db, bcrypt
 from weatherflaskwebapp.helper import forecast_api_request
-from weatherflaskwebapp.forms import RegistrationForm, LoginForm, WeatherForm, SaveForm, UnSaveForm
+from weatherflaskwebapp.forms import RegistrationForm, LoginForm, WeatherForm
 from weatherflaskwebapp.models import User, City
-import ast
 
 
 API_KEY = config('API_KEY')
