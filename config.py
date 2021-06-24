@@ -10,7 +10,7 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = config['HEROKU_DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = config('HEROKU_DATABASE_URL')
 
 
 class StagingConfig(Config):
