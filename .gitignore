@@ -8,9 +8,6 @@ env
 # DB
 site.db
 
-## Background Image
-weatherflaskwebapp/static/jpg/
-
 # Dependency directories
 node_modules/
 
