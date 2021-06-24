@@ -11,41 +11,9 @@ from weatherflaskwebapp.models import User, City
 API_KEY = config('API_KEY')
 
 
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-# 	form = WeatherForm()
-# 	if form.validate_on_submit():
-# 		countrycode = 'us'
-# 		if not form.city.data and not form.zipcode.data:
-# 			error_message = {
-# 				'message': 'Please Fill In At Least One Field'
-# 			}
-# 			return render_template('error.html', title='Error', error_message=error_message)
-# 		elif form.city.data:
-# 			city = form.city.data.strip()
-# 			url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}'
-# 		elif form.zipcode.data:
-# 			zipcode = form.zipcode.data.strip()
-# 			url = f"http://api.openweathermap.org/data/2.5/weather?zip={zipcode},{countrycode}&appid={API_KEY}"
-# 		response = requests.get(url).json()
-# 		if response.get('cod') != 200:
-# 			message = response.get('message', '')
-# 			error_message = {
-# 				'message': message
-# 			}
-# 			return render_template('error.html', title='Error', error_message=error_message)
-# 		else:
-# 			weather_dict = forecast_api_request(response, API_KEY)
-# 			city = weather_dict.get('current')[0].get('city')
-# 			user = User.query.filter_by(id=current_user.id).first()
-# 			user_cities = user.cities
-# 			# check if city is saved
-# 			if city not in [c.name for c in user_cities]:
-# 				return redirect(url_for('add_city', weather=weather_dict))
-# 			else:
-# 				return redirect(url_for('remove_city', weather=weather_dict))
-# 	return render_template('index.html', title='Index', form=form)
-
+@app.route('/')
+def index():
+	return redirect(url_for('home'))
 
 
 @app.route('/home', methods=['GET', 'POST'])
