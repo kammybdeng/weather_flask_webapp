@@ -5,15 +5,23 @@ A weather forecast application that allows users to search a city's weather and 
 https://weather-app100.herokuapp.com/
 
 
-## Features
-- User registration and login/logout
-- Save and delete functionality
-- User dashboard
-- AJAX calls with jQuery
+## Main Features
+- Usage of Flask **Template** to built User Registration, Login/Logout, and Account Views.
+- Save and delete cities functionality built with **CRUD** operation.
+- Usage of **Flask-SQLAlchemy** to built Database to store user information
+- Implemented **AJAX** calls with jQuery to allow users to request for a different city weather without having to reload the page.
+- Usage of **Flask-Bcrypt** for User Authentication and storage of Password
+- Usage of **request library** to fetch third party's data through its API
+- Package Structure and **Configuration** for deployment in Heroku
 
-## Features in development:
+## Features in development
 - Ability to modify cities in dashboard
 - Ability to use Google map to select location
+
+## Challenges
+- First time adding AJAX to a flask application. This stack is uncommon, hence it was more difficult to find useful documentations.
+- Some libraries mentioned in the tutorial were deprecated. I had to find solutions to replace the deprecated methods.
+- First time deploying on Heroku, hence running into many unfamiliar challenges specifically related to deployment.
 
 ## Others
 ### Third Party API limitation
@@ -24,4 +32,5 @@ Heroku's free tier hosting server will sleep the server after 30 minutes of
 inactivity, hence the website could take a couple minute to load up.
 
 ## Credit
-Weather icon: https://github.com/erikflowers/weather-icons
+- Flask Tutorial : https://www.youtube.com/watch?v=MwZwr5Tvyxo&list=RDCMUCCezIgC97PvUuR4_gbFUs5g&index=5&ab_channel=CoreySchafer
+- Weather icon: https://github.com/erikflowers/weather-icons
