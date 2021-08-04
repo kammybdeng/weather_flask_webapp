@@ -35,7 +35,7 @@
         <h1 class="cityTitle">{{ city }}</h1>
         <p class="currentTime"> {{ date }}, {{ currenttime }}</p>
         <i class= "icon wi wi-owm-{{ iconcode }}"></i>
-        <p>{{ description }}</p>
+        <p class="description">{{ description }}</p>
         <p class="degrees"> {{ celsius }}° C | {{ fahrenheit }}° F</p>
         {{ #saved }}
         <form action="/unsave_city" method="POST">

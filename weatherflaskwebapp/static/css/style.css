@@ -45,7 +45,7 @@ body {
     margin: 80px auto;
     width: 50%;
     border: 3px solid;
-    padding: 30px 15px;
+    padding: 20px;
     border-color: #404969;
     background: #BDE4F4;
     text-align: center;
@@ -113,4 +113,11 @@ a {
 .currentTime {
     font-weight: 500;
     font-size: 1.5rem;
+    padding: 5px;
+    margin: 0px;
+}
+
+
+.description {
+    font-size: 1.2rem;
 }
