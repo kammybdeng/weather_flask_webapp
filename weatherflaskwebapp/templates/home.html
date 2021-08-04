@@ -1,13 +1,10 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="inner" id="inputForm" >
+    <div class="searchBox" id="inputForm" >
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend>
-                    Weather Live
-                </legend>
             <div class="form-group">
                 {{ form.city.label(class="form-control-label") }}
                 {% if form.city.errors %}

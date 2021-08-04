@@ -42,13 +42,11 @@ body {
 
 
 .inner {
-    margin: 80px auto;
-    width: 50%;
-    border: 3px solid;
+    margin: 10px auto;
+    width: 75%;
     padding: 20px;
-    border-color: #404969;
-    background: #BDE4F4;
-    text-align: center;
+    background: #transparent;
+    text-align: left;
     }
 
 .row {
@@ -67,10 +65,8 @@ body {
 .forecast-container {
   margin: auto;
   width: 75%;
-  border: 3px solid ;
-  border-color: #404969;
-  padding: 25px;
-  background: #BDE4F4;
+  padding: 10px;
+  background: rgb(255, 127, 80, .5);
   text-align: center;
 
 }
@@ -120,4 +116,15 @@ a {
 
 .description {
     font-size: 1.2rem;
+}
+
+.searchBox {
+  margin: 50px 400px 5px 400px;
+  padding: 20px;
+  border: 3px transparent;
+  text-align: center;
+}
+
+.btn {
+    background-color: beige;
 }
