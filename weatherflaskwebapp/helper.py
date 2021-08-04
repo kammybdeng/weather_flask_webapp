@@ -44,6 +44,12 @@ def forecast_api_request(response, API_KEY):
     url = 'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exclude=minutely,hourly&appid={}' \
         .format(lat, lon, API_KEY)
     forecast_response = requests.get(url).json()
+    date_and_time = timestamp_to_datetime(forecast_response['current']['dt'],
+                                              forecast_response['timezone_offset']
+                                              )
+    current_date = date_and_time.split()[0]
+    current_time = date_and_time.split()[1]
+    print(type(current_time))
     weather_dict = {
         'current': {
             'city': response['name'].title(),
@@ -53,9 +59,8 @@ def forecast_api_request(response, API_KEY):
             'uvi': forecast_response['current']['uvi'],
             'description': response['weather'][0]['description'],
             'iconcode': response['weather'][0]['id'],
-            'datetime': timestamp_to_datetime(forecast_response['current']['dt'],
-                                              forecast_response['timezone_offset']
-                                              )
+            'date': current_date,
+            'currenttime': datetime.strptime(current_time, "%H:%M").strftime("%I:%M %p"),
         },
         'forecast': get_daily_forecast(forecast_response['daily'])
     }
