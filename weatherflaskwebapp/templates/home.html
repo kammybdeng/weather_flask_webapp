@@ -5,7 +5,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">
+                <legend>
                     Weather Live
                 </legend>
             <div class="form-group">
@@ -32,14 +32,12 @@
 <script id="result_template" type="text/html">
     <div class="inner">
     {{ #current }}
-        <h1>{{ city }}</h1>
-        <p class="h5">Current Time:  {{ datetime }}</p>
+        <h1 class="cityTitle">{{ city }}</h1>
+        <p class="currentTime"> {{ date }}, {{ currenttime }}</p>
         <i class= "icon wi wi-owm-{{ iconcode }}"></i>
-        <p>{{ description }}</p>
-        <p class="h4"> {{ celsius }} Celsius | {{ fahrenheit }} Fahrenheit</p>
-        <p> UV index: {{ uvi }}</p>
+        <p class="description">{{ description }}</p>
+        <p class="degrees"> {{ celsius }}° C | {{ fahrenheit }}° F</p>
         {{ #saved }}
-        <!-- <p>IS saved</p> -->
         <form action="/unsave_city" method="POST">
             <input id="city" name="city" type="text" value="{{ city }}" style = "display: None">
             <button type="submit" class="btn btn-outline-info">Unsave</button>
@@ -61,13 +59,12 @@
         {{ #forecast }}
         <div class="col-sm">
             <p class="h5">{{ datetime }}</p><br/>
-            <p class="h7">{{ celsius }} Celsius | {{ fahrenheit }} Fahrenheit</p>
+            <p class="h7">{{ celsius }}° C | {{ fahrenheit }}° F</p>
             <p > UV index: {{ uvi }} </p>
         </div>
         {{ /forecast }}
         </div>
         </div>
-    <!-- </div> -->
 </script>
 
 {% endraw %}
